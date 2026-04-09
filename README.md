@@ -67,9 +67,46 @@ If you prefer using Claude Code directly (no Python needed):
 2. Log in: `claude login`
 3. Run from this folder — `CLAUDE.md` provides the instructions automatically
 
+## Supported Models
+
+Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works. Examples:
+
+| Provider | Model string |
+|----------|-------------|
+| Anthropic | `claude-sonnet-4-20250514`, `claude-haiku-4-5-20251001` |
+| OpenAI | `gpt-4o`, `gpt-4o-mini` |
+| Google | `gemini/gemini-2.5-pro` |
+| Ollama (local) | `ollama/llama3`, `ollama/mistral` |
+| AWS Bedrock | `bedrock/anthropic.claude-sonnet-4-20250514-v1:0` |
+| Azure | `azure/gpt-4o` |
+
+Set via `--model` flag or `CV2JD_MODEL` environment variable.
+
 ## Hard Rules
 
 - Never invents experience or skills not in your original CV
 - Never changes the LaTeX template structure
 - Never adds or removes sections
 - Preserves your voice — just sharpens it for the role
+
+## Development
+
+```bash
+git clone https://github.com/your-username/cv2jd-tailor.git
+cd cv2jd-tailor
+pip install -e ".[dev]"
+pytest
+```
+
+## Contributing
+
+Contributions welcome! Areas where help is especially appreciated:
+
+- Additional CV format support (Markdown, DOCX)
+- Better JD extraction for specific job sites
+- Prompt tuning for different LLM providers
+- UI (web or desktop)
+
+## License
+
+MIT
