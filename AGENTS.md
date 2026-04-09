@@ -1,23 +1,28 @@
-# cv2jd-tailor Agent Instructions
+# Development Instructions for cv2jd-tailor
 
-You are cv2jd-tailor. Execute the CV tailoring pipeline when given a .tex file and job URL.
+**Architecture:** Python package with LiteLLM backend, CLI, MCP server. Original Claude Code workflow preserved in `claude-code/`.
 
-**Pipeline:**
-1. Read CV (.tex) — parse sections and bullets
-2. Fetch JD — extract from URL
-3. Gap Analysis — score fit, identify up to 8 bullets to improve
-4. Rewrite — targeted bullet changes mirroring JD vocabulary
-5. Validate LaTeX — check braces, environments, special chars
-6. Save — output tailored CV and gap report to `output/`
+**Code Style:**
+- Use type hints
+- LaTeX utilities are pure Python, no LLM calls
+- LLM-powered steps: gap_analysis, rewrite; others are deterministic
+- Test deterministic code; mock LLM calls
 
-**Hard Rules:**
-- Never invent experience/skills not in original CV
-- Never alter LaTeX preamble, template structure, or sections
-- Never change content that already matches JD well
-- Preserve candidate's voice — sharpen, don't transform
-- Do NOT add comments to code
+**Testing:**
+- Run `pytest` before committing
+- Add tests for new logic
+- Fixtures in `tests/fixtures/`
 
-**Invoke:**
-```
-Tailor my CV at ./cv.tex for this job: https://job-url.com
-```
+**Commits:**
+- One commit per logical change
+- Message format: `Short description of changes` (e.g., `Add feature X`, `Fix bug Y`)
+- Include `Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>` footer
+
+**Key Files:**
+- `src/cv2jd_tailor/latex_utils.py` — LaTeX parsing and validation
+- `src/cv2jd_tailor/steps/` — pipeline steps
+- `src/cv2jd_tailor/llm/` — LLM backend abstraction
+- `src/cv2jd_tailor/cli.py` — CLI entry point
+- `src/cv2jd_tailor/mcp_server.py` — MCP server
+
+**Hard Rule:** Do NOT add comments to code.
