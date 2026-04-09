@@ -43,7 +43,7 @@ claude
 > Tailor my CV at ../input/my_cv.tex for this job: https://jobs.example.com/123
 ```
 
-### Option C — Convenience script
+### Option C — Convenience script for Claude Code
 ```bash
 ./claude-code/tailor.sh path/to/my_cv.tex https://careers.example.com/job/123
 ```
@@ -136,7 +136,6 @@ Contributions welcome! Areas where help is especially appreciated:
 - Additional CV format support (Markdown, DOCX)
 - Better JD extraction for specific job sites
 - Prompt tuning for different LLM providers
-- UI (web or desktop)
 
 ## License
 
