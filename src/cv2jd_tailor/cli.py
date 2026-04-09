@@ -122,5 +122,14 @@ def validate(
     raise typer.Exit(1 if errors else 0)
 
 
+@app.command()
+def mcp() -> None:
+    """Start the MCP server for use with Claude Desktop, Cursor, etc."""
+    from cv2jd_tailor.mcp_server import mcp as mcp_server
+
+    typer.echo("Starting cv2jd-tailor MCP server...")
+    mcp_server.run()
+
+
 if __name__ == "__main__":
     app()
