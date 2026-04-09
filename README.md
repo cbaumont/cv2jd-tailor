@@ -2,6 +2,29 @@
 
 Tailor your LaTeX CV to any job description — works with any LLM provider (Claude, GPT, Gemini, Ollama, etc.) via CLI or MCP server.
 
+## API Keys
+
+The Python CLI and MCP server require an API key for your chosen LLM provider. Set the appropriate environment variable before running:
+
+| Provider | Environment variable | How to get a key |
+|----------|---------------------|------------------|
+| Anthropic | `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com/) |
+| OpenAI | `OPENAI_API_KEY` | [platform.openai.com](https://platform.openai.com/api-keys) |
+| Google | `GEMINI_API_KEY` | [aistudio.google.com](https://aistudio.google.com/apikey) |
+| AWS Bedrock | `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` | [AWS Console](https://console.aws.amazon.com/) |
+| Azure OpenAI | `AZURE_API_KEY` + `AZURE_API_BASE` | [Azure Portal](https://portal.azure.com/) |
+| Ollama (local) | *None needed* | [ollama.com](https://ollama.com/) — runs locally |
+
+Example:
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+cv2jd-tailor tailor cv.tex https://jobs.example.com/123 --model claude-sonnet-4-20250514
+```
+
+> **Note:** Claude Code (Option B) uses your Claude Pro subscription — no API key needed. Just run `claude login`.
+
+See the [LiteLLM docs](https://docs.litellm.ai/docs/providers) for the full list of providers and their required environment variables.
+
 ## Quick Start
 
 ### Option A — Python CLI (recommended)
@@ -53,7 +76,10 @@ Expose cv2jd-tailor as an MCP tool for Claude Desktop, Cursor, or any MCP-compat
     "cv2jd-tailor": {
       "command": "cv2jd-tailor",
       "args": ["mcp"],
-      "env": { "CV2JD_MODEL": "claude-sonnet-4-20250514" }
+      "env": {
+        "CV2JD_MODEL": "claude-sonnet-4-20250514",
+        "ANTHROPIC_API_KEY": "sk-ant-..."
+      }
     }
   }
 }
