@@ -38,14 +38,14 @@ cv2jd-tailor tailor cv.tex https://jobs.example.com/123 --model ollama/llama3
 
 ### Option B — Claude Code (zero dependencies)
 ```bash
-cd cv2jd-tailor
+cd cv2jd-tailor/claude-code
 claude
-> Tailor my CV at ./my_cv.tex for this job: https://jobs.example.com/123
+> Tailor my CV at ../input/my_cv.tex for this job: https://jobs.example.com/123
 ```
 
 ### Option C — Convenience script
 ```bash
-./tailor.sh path/to/my_cv.tex https://careers.example.com/job/123
+./claude-code/tailor.sh path/to/my_cv.tex https://careers.example.com/job/123
 ```
 
 ## How it works
@@ -91,7 +91,12 @@ If you prefer using Claude Code directly (no Python needed):
 
 1. Install Claude Code: `npm install -g @anthropic-ai/claude-code`
 2. Log in: `claude login`
-3. Run from this folder — `CLAUDE.md` provides the instructions automatically
+3. Run from the `claude-code/` subfolder — `CLAUDE.md` provides the instructions automatically
+
+```bash
+cd claude-code
+claude
+```
 
 ## Supported Models
 
