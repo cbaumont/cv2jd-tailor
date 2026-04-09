@@ -1,0 +1,44 @@
+\documentclass[11pt,a4paper]{moderncv}
+\moderncvstyle{banking}
+\moderncvcolor{blue}
+
+\name{Jane}{Doe}
+\title{Software Engineer}
+\email{jane.doe@example.com}
+\phone{+1-555-0100}
+
+\begin{document}
+
+\makecvtitle
+
+\section{Professional Summary}
+Experienced software engineer with 5 years of expertise in backend development,
+distributed systems, and cloud infrastructure.
+
+\section{Experience}
+
+\cventry{2021--Present}{Senior Software Engineer}{Acme Corp}{San Francisco, CA}{}{
+\begin{itemize}
+\item Led migration of monolithic application to microservices architecture, reducing deployment time by 60\%
+\item Designed and implemented real-time data pipeline processing 10M events/day using Kafka and Flink
+\item Mentored team of 4 junior engineers through code reviews and pair programming sessions
+\end{itemize}
+}
+
+\cventry{2019--2021}{Software Engineer}{StartupCo}{New York, NY}{}{
+\begin{itemize}
+\item Built RESTful APIs serving 50K daily active users with 99.9\% uptime
+\item Implemented CI/CD pipeline using GitHub Actions, reducing release cycle from 2 weeks to 2 days
+\item Optimized database queries resulting in 40\% reduction in average response time
+\end{itemize}
+}
+
+\section{Education}
+\cventry{2015--2019}{B.S. Computer Science}{University of Technology}{}{GPA: 3.8}{}
+
+\section{Skills}
+\cvitem{Languages}{Python, Go, Java, TypeScript}
+\cvitem{Infrastructure}{AWS, Kubernetes, Docker, Terraform}
+\cvitem{Data}{PostgreSQL, Redis, Kafka, Elasticsearch}
+
+\end{document}
