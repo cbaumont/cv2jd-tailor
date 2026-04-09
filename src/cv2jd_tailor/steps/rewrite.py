@@ -30,15 +30,26 @@ def _extract_latex(response: str) -> str:
     """Extract LaTeX source from an LLM response."""
     # Try to find LaTeX block in markdown code fence
     for marker in ("```latex", "```tex"):
-        if marker in response:
-            start = response.index(marker) + len(marker)
-            end = response.index("```", start)
-            return response[start:end].strip()
+        result = _extract_fenced_block(response, marker)
+        if result is not None:
+            return result
 
-    if "```" in response:
-        start = response.index("```") + 3
-        end = response.index("```", start)
-        return response[start:end].strip()
+    result = _extract_fenced_block(response, "```")
+    if result is not None:
+        return result
 
     # Assume the whole response is LaTeX
     return response.strip()
+
+
+def _extract_fenced_block(text: str, opener: str) -> str | None:
+    """Extract content from a fenced code block, or None if not found."""
+    idx = text.find(opener)
+    if idx == -1:
+        return None
+    start = idx + len(opener)
+    end = text.find("```", start)
+    if end == -1:
+        # No closing fence — take everything after the opener
+        return text[start:].strip()
+    return text[start:end].strip()

@@ -49,15 +49,23 @@ def _format_cv_sections(cv: ParsedCV) -> str:
 def _parse_json_response(response: str) -> dict:
     """Extract and parse JSON from an LLM response."""
     # Try to find JSON block in markdown code fence
-    if "```json" in response:
-        start = response.index("```json") + 7
-        end = response.index("```", start)
-        json_str = response[start:end].strip()
-    elif "```" in response:
-        start = response.index("```") + 3
-        end = response.index("```", start)
-        json_str = response[start:end].strip()
-    else:
+    json_str = _extract_fenced_block(response, "```json")
+    if json_str is None:
+        json_str = _extract_fenced_block(response, "```")
+    if json_str is None:
         json_str = response.strip()
 
     return json.loads(json_str)
+
+
+def _extract_fenced_block(text: str, opener: str) -> str | None:
+    """Extract content from a fenced code block, or None if not found."""
+    idx = text.find(opener)
+    if idx == -1:
+        return None
+    start = idx + len(opener)
+    end = text.find("```", start)
+    if end == -1:
+        # No closing fence — take everything after the opener
+        return text[start:].strip()
+    return text[start:end].strip()

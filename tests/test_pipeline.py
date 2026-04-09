@@ -75,6 +75,18 @@ def test_extract_latex_bare():
     assert response == result
 
 
+def test_parse_json_unclosed_fence():
+    response = '```json\n{"fit_score": 90}\n'
+    result = _parse_json_response(response)
+    assert result["fit_score"] == 90
+
+
+def test_extract_latex_unclosed_fence():
+    response = "```latex\n\\documentclass{article}\n"
+    result = _extract_latex(response)
+    assert result == "\\documentclass{article}"
+
+
 def test_format_report():
     gap = {
         "fit_score": 72,
