@@ -1,5 +1,7 @@
-# cv2jd-tailor
-
+<h1>
+    <img src="logo.png" width="100" style="vertical-align: middle; margin-right: 10px;">
+    cv2jd-tailor
+</h1>
 Tailor your LaTeX CV to any job description — works with any LLM provider (Claude, GPT, Gemini, Ollama, etc.) via CLI or MCP server.
 
 ## API Keys
