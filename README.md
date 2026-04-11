@@ -63,10 +63,12 @@ cv2jd-tailor runs a 6-step pipeline:
 
 ## Outputs
 
+Each run writes two files into `output/`, suffixed with a slug from the JD title and a timestamp so nothing is overwritten:
+
 | File | Description |
 |------|-------------|
-| `output/tailored_cv.tex` | Your tailored CV — same LaTeX format as the original |
-| `output/gap_report.md`   | Fit score, what changed, keywords added, what was left alone |
+| `output/tailored_cv_<jd-slug>_<timestamp>.tex` | Your tailored CV — same LaTeX format as the original |
+| `output/gap_report_<jd-slug>_<timestamp>.md`   | Fit score, what changed, keywords added, what was left alone |
 
 ## MCP Server
 

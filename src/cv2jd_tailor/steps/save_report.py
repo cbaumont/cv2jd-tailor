@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+from datetime import datetime
 from pathlib import Path
 
 
@@ -9,21 +11,47 @@ def save_outputs(
     tailored_tex: str,
     gap_analysis: dict,
     output_dir: str | Path = "output",
+    jd_title: str | None = None,
 ) -> tuple[Path, Path]:
     """Save the tailored CV and gap report to the output directory.
+
+    Filenames include a slug derived from the JD title plus a timestamp so
+    successive runs never overwrite previous outputs.
 
     Returns (cv_path, report_path).
     """
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    cv_path = out / "tailored_cv.tex"
+    suffix = _build_suffix(jd_title)
+
+    cv_path = out / f"tailored_cv_{suffix}.tex"
     cv_path.write_text(tailored_tex, encoding="utf-8")
 
-    report_path = out / "gap_report.md"
+    report_path = out / f"gap_report_{suffix}.md"
     report_path.write_text(_format_report(gap_analysis), encoding="utf-8")
 
     return cv_path, report_path
+
+
+def _build_suffix(jd_title: str | None) -> str:
+    """Build a filename suffix from a JD title and the current timestamp.
+
+    The timestamp includes microseconds so that two runs in the same second
+    still produce distinct filenames.
+    """
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    slug = _slugify(jd_title) if jd_title else ""
+    return f"{slug}_{timestamp}" if slug else timestamp
+
+
+def _slugify(value: str, max_length: int = 60) -> str:
+    """Normalise a string to a safe, lowercase, hyphen-separated slug."""
+    value = value.lower()
+    value = re.sub(r"[^a-z0-9]+", "-", value).strip("-")
+    if len(value) > max_length:
+        value = value[:max_length].rstrip("-")
+    return value
 
 
 def _format_report(gap: dict) -> str:

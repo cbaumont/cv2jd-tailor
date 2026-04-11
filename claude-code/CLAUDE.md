@@ -39,8 +39,12 @@ Before saving, verify the modified LaTeX:
 - Fix any issues silently
 
 ### Step 6 — Save & Report
-- Save the tailored CV as `output/tailored_cv.tex`
-- Write `output/gap_report.md` containing:
+- Build a suffix `<jd-slug>_<timestamp>` where `<jd-slug>` is a lowercase,
+  hyphen-separated slug of the JD title (e.g. `senior-backend-engineer`) and
+  `<timestamp>` is the current time formatted `YYYYMMDD_HHMMSS`
+- Save the tailored CV as `output/tailored_cv_<suffix>.tex` — never overwrite
+  a previous run
+- Write `output/gap_report_<suffix>.md` containing:
   - Fit score (before and estimated after)
   - What was changed and why
   - Keywords added

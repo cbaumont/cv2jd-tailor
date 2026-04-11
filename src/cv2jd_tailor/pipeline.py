@@ -72,7 +72,9 @@ def run_pipeline(
 
     # Step 6: Save (unless dry run)
     if not dry_run:
-        cv_out, report_out = save_outputs(tailored_tex, gap, output_dir)
+        cv_out, report_out = save_outputs(
+            tailored_tex, gap, output_dir, jd_title=jd.title
+        )
         result.cv_path = cv_out
         result.report_path = report_out
 
