@@ -1,55 +1,52 @@
-"""Step 4: Rewrite targeted CV bullets using an LLM."""
+"""Step 4: Apply gap-analysis rewrites to the CV as targeted replacements."""
 
 from __future__ import annotations
 
-import json
-
-from cv2jd_tailor.llm.base import LLMBackend
-from cv2jd_tailor.prompts.rewrite import SYSTEM, format_rewrite_prompt
+import re
 
 
-def rewrite_cv(
-    original_tex: str, gap_analysis: dict, llm: LLMBackend
-) -> str:
-    """Rewrite specific CV bullets based on the gap analysis.
+SUMMARY_SECTION_RE = re.compile(
+    r"(\\section\*?\s*\{Summary\}\s*)(.*?)(?=\\section\*?\s*\{|\\switchcolumn|\\end\{paracol\}|\\end\{document\})",
+    re.DOTALL | re.IGNORECASE,
+)
 
-    Returns the complete modified LaTeX source.
+
+def rewrite_cv(original_tex: str, gap_analysis: dict) -> str:
+    """Apply gap-analysis rewrites to the CV.
+
+    Deterministic string replacement:
+    - each bullet in bullets_to_improve: replace original_bullet with suggestion
+    - summary (if summary_update_needed): locate the Summary section in the
+      source and replace its body with summary_suggestion
     """
-    user_prompt = format_rewrite_prompt(
-        original_tex=original_tex,
-        gap_analysis_json=json.dumps(gap_analysis, indent=2),
-    )
+    tex = original_tex
 
-    response = llm.complete(system=SYSTEM, user=user_prompt)
+    for bullet in gap_analysis.get("bullets_to_improve") or []:
+        original = (bullet.get("original_bullet") or "").strip()
+        suggestion = (bullet.get("suggestion") or "").strip()
+        if not original or not suggestion or original == suggestion:
+            continue
+        if original in tex:
+            tex = tex.replace(original, suggestion, 1)
 
-    # Extract LaTeX from the response (may be wrapped in ```latex blocks)
-    return _extract_latex(response)
+    if gap_analysis.get("summary_update_needed"):
+        new_summary = (gap_analysis.get("summary_suggestion") or "").strip()
+        if new_summary:
+            tex = _replace_summary(tex, new_summary)
 
-
-def _extract_latex(response: str) -> str:
-    """Extract LaTeX source from an LLM response."""
-    # Try to find LaTeX block in markdown code fence
-    for marker in ("```latex", "```tex"):
-        result = _extract_fenced_block(response, marker)
-        if result is not None:
-            return result
-
-    result = _extract_fenced_block(response, "```")
-    if result is not None:
-        return result
-
-    # Assume the whole response is LaTeX
-    return response.strip()
+    return tex
 
 
-def _extract_fenced_block(text: str, opener: str) -> str | None:
-    """Extract content from a fenced code block, or None if not found."""
-    idx = text.find(opener)
-    if idx == -1:
-        return None
-    start = idx + len(opener)
-    end = text.find("```", start)
-    if end == -1:
-        # No closing fence — take everything after the opener
-        return text[start:].strip()
-    return text[start:end].strip()
+def _replace_summary(tex: str, new_summary: str) -> str:
+    """Replace the body of the Summary section with new_summary, preserving
+    the leading blank line and the trailing whitespace that separates it from
+    the next section."""
+    match = SUMMARY_SECTION_RE.search(tex)
+    if not match:
+        return tex
+    header = match.group(1)
+    body = match.group(2)
+    trailing_ws = body[len(body.rstrip()):]
+    leading_ws = body[: len(body) - len(body.lstrip())]
+    replacement = f"{header}{leading_ws}{new_summary}{trailing_ws}"
+    return tex[: match.start()] + replacement + tex[match.end():]

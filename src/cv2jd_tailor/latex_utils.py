@@ -29,7 +29,7 @@ SPECIAL_CHARS = set("&%$#_{}~^")
 
 # Pattern to match \section or \subsection commands
 SECTION_RE = re.compile(
-    r"\\(section|subsection)\s*\{([^}]*)\}",
+    r"\\(section|subsection)\*?\s*\{([^}]*)\}",
     re.MULTILINE,
 )
 

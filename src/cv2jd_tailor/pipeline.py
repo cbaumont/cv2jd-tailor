@@ -56,7 +56,7 @@ def run_pipeline(
     gap = run_gap_analysis(cv, jd, llm)
 
     # Step 4: Rewrite
-    tailored_tex = rewrite_cv(cv.raw, gap, llm)
+    tailored_tex = rewrite_cv(cv.raw, gap)
 
     # Step 5: Validate
     is_valid, issues = validate_cv_latex(tailored_tex)
